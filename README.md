@@ -1,3 +1,9 @@
+:warning: This image is based on `heroku/ruby` but **will not**
+precompile Rails Assets to prevent the _Connection refused_
+problem when using database.
+
+See https://devcenter.heroku.com/articles/rails-asset-pipeline#troubleshooting.
+
 # Heroku Ruby Docker Image
 
 This image is for use with Heroku Docker CLI.
@@ -8,7 +14,7 @@ Your project must contain the following files:
 
 * `Gemfile` and `Gemfile.lock`
 * Ruby 2.2.3
-* `assets:precompile` rake task
+* ~~`assets:precompile` rake task~~
 * `Procfile` (see [the Heroku Dev Center for details](https://devcenter.heroku.com/articles/procfile))
 
 Then create an `app.json` file in the root directory of your application with
@@ -43,7 +49,7 @@ $ docker-compose up web
 ```
 
 The first time you run this command, Bundler will download all dependencies into
-the container, precompile your assets (using the `assets:precompile rake task),
+the container, ~~precompile your assets (using the `assets:precompile rake task)~~,
 build your application, and then run it. Subsequent runs will use cached
 dependencies (unless your `Gemfile` or `Gemfile.lock` has changed).
 
