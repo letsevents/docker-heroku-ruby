@@ -1,5 +1,5 @@
 FROM heroku/cedar:14
-MAINTAINER Terence Lee <terence@heroku.com>
+MAINTAINER Paulo Diovani <paulo.diovani@codeminer42.com>
 
 RUN mkdir -p /app/user
 WORKDIR /app/user
