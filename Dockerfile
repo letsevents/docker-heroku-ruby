@@ -1,5 +1,5 @@
 FROM heroku/cedar:14
-MAINTAINER Terence Lee <terence@heroku.com>
+MAINTAINER Paulo Diovani <paulo.diovani@codeminer42.com>
 
 RUN mkdir -p /app/user
 WORKDIR /app/user
@@ -31,7 +31,6 @@ ONBUILD ADD . /app/user
 # How to conditionally `rake assets:precompile`?
 ONBUILD ENV RAILS_ENV production
 ONBUILD ENV SECRET_KEY_BASE $(openssl rand -base64 32)
-ONBUILD RUN bundle exec rake assets:precompile
 
 # export env vars during run time
 RUN mkdir -p /app/.profile.d/
