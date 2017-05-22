@@ -4,6 +4,8 @@ problem when using database.
 
 See https://devcenter.heroku.com/articles/rails-asset-pipeline#troubleshooting.
 
+Based on the modifications performed by Paulo Diovani (https://github.com/letsevents/docker-heroku-ruby).
+
 # Heroku Ruby Docker Image
 
 This image is for use with Heroku Docker CLI.
@@ -13,7 +15,7 @@ This image is for use with Heroku Docker CLI.
 Your project must contain the following files:
 
 * `Gemfile` and `Gemfile.lock`
-* Ruby 2.2.3
+* Ruby 2.4.0
 * ~~`assets:precompile` rake task~~
 * `Procfile` (see [the Heroku Dev Center for details](https://devcenter.heroku.com/articles/procfile))
 
