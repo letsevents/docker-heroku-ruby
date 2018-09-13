@@ -1,4 +1,4 @@
-FROM heroku/cedar:14
+FROM heroku/heroku:16
 MAINTAINER Samuel Brandão <samuel@lets.events>
 
 ARG USER_ID
@@ -20,7 +20,9 @@ ENV GEM_HOME=${GEM_ROOT_DIR} \
     BUNDLE_APP_CONFIG=${GEM_ROOT_DIR} \
     GEM_PATH=${GEM_ROOT_DIR} \
     BUNDLE_BIN=${GEM_ROOT_DIR}/bin \
-    PATH=${RUBY_DIR}/bin:${NODE_DIR}/bin:${GEM_ROOT_DIR}/bin:${PATH}
+    PATH=${RUBY_DIR}/bin:${NODE_DIR}/bin:${GEM_ROOT_DIR}/bin:${PATH} \
+    PG_VERSION=9.5.3 \
+    PG_DOWNLOAD_SHA256=1f070a8e80ce749e687d2162e4a27107e2cc1703a471540e08111bbfb5853f9e
 
 RUN set -ex \
   && mkdir -p ${BUNDLE_BIN} ${RUBY_DIR} ${NODE_DIR} ${APP_DIR} \
@@ -35,6 +37,40 @@ RUN set -ex \
   # Add non root user
   && useradd --uid $USER_ID --groups $GROUP -m app \
   && chown -R $USER_ID.$GROUP ${BASE_DIR} /home/app
+
+RUN set -ex \
+  # Install ubuntu packages for development
+  && DEBIAN_FRONTEND=noninteractive apt-get update -y \
+  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+    apt-transport-https \
+    autoconf \
+    bison \
+    build-essential \
+    imagemagick \
+    libffi-dev \
+    libgdbm3 \
+    libgdbm-dev \
+    libncurses5-dev \
+    libreadline6-dev \
+    libssl-dev \
+    libyaml-dev \
+    python \
+    zlib1g-dev \
+  # remove apt files
+  && DEBIAN_FRONTEND=noninteractive apt-get -y clean \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN set -ex \
+  # setup dependencies for bundle install - expected to be used at runtime and with a volume mounted at ${GEM_ROOT_DIR}
+  && curl -sL http://ftp.postgresql.org/pub/source/v${PG_VERSION}/postgresql-${PG_VERSION}.tar.gz -o /tmp/postgresql.tar.gz \
+  && echo "$PG_DOWNLOAD_SHA256 /tmp/postgresql.tar.gz" | sha256sum -c - \
+  && mkdir -p /tmp/postgresql \
+  && tar -xzf /tmp/postgresql.tar.gz -C /tmp/postgresql --strip-components=1 \
+  && cd /tmp/postgresql \
+  && CFLAGS="-O3 -pipe" ./configure --prefix=/usr/local 1>/dev/null \
+  && make -j"$(getconf _NPROCESSORS_ONLN)" install 1>/dev/null 2>/dev/null \
+  && cd /tmp \
+  && rm -rf /tmp/postgresql*
 
 WORKDIR $APP_DIR
 USER $USER_ID
