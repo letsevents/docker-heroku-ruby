@@ -21,7 +21,7 @@ a appropriate configuration (example with docker-compose):
 version: '3.6'
 services:
   web:
-    image: lets/docker-heroku-ruby:0.0.1
+    image: lets/docker-heroku-ruby:0.0.2
     container_name: web
     command: bundle exec puma -C config/puma.rb
     env_file: .env
@@ -29,7 +29,7 @@ services:
       - db
       - redis
     volumes:
-      - bundler:/app/bundle/ruby/2.4.0
+      - bundler:/app/bundle
       - user_home:/home/app
       - .:/app/src
     ports:
@@ -44,6 +44,6 @@ volumes:
   bundler:
 ```
 
-The required stuff are volumes for `bundler` (`/app/bundle/ruby/2.4.0`)  and
-app (`/app/src`).  The `/home/app` volume is not required and are present only
-for development convenience (pry history, shell history).
+The required stuff are volumes for `bundler` (`/app/bundle`)  and app
+(`/app/src`).  The `/home/app` volume is not required and are present only for
+development convenience (pry history, shell history).
