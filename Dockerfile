@@ -1,7 +1,7 @@
-FROM heroku/heroku:16
+FROM heroku/heroku:18
 MAINTAINER Samuel Brandão <samuel@lets.events>
 
-ARG USER_ID
+ARG USER_ID=1001
 ARG GROUP=users
 ARG BASE_DIR=/app
 
@@ -9,8 +9,8 @@ ARG BASE_DIR=/app
 # build dependencies
 #
 
-ARG PG_VERSION=9.5.3
-ARG PG_DOWNLOAD_SHA256=1f070a8e80ce749e687d2162e4a27107e2cc1703a471540e08111bbfb5853f9e
+ARG PG_VERSION=11.6
+ARG PG_DOWNLOAD_SHA256=5644ad3f75bc9873e80e3d569c80ad75863438b4260bfe4c82f056486dba9308
 
 RUN set -ex \
   # Install ubuntu packages for development
@@ -22,8 +22,6 @@ RUN set -ex \
     build-essential \
     imagemagick \
     libffi-dev \
-    libgdbm3 \
-    libgdbm-dev \
     libncurses5-dev \
     libreadline6-dev \
     libssl-dev \
@@ -50,7 +48,7 @@ RUN set -ex \
 # binary dependencies
 #
 
-ARG RUBY_VERSION=2.4.0
+ARG RUBY_VERSION=2.4.9
 ARG NODE_VERSION=0.12.7
 ARG RUBY_TGZ_SOURCE=https://heroku-buildpack-ruby.s3.amazonaws.com/cedar-14/ruby-${RUBY_VERSION}.tgz
 ARG NODE_TGZ_SOURCE=http://s3pository.heroku.com/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz
@@ -68,7 +66,6 @@ RUN set -ex \
 # app setup
 #
 
-ARG BUNDLER_VERSION=1.16.1
 ARG GEM_ROOT_DIR=${BASE_DIR}/bundle
 ARG SRC_DIR=${BASE_DIR}/src
 
@@ -81,7 +78,7 @@ RUN set -ex \
   # Configure rubygems
   && echo "gem: --no-rdoc --no-ri" >> /etc/gemrc \
   # Install Bundler
-  && gem install bundler -v ${BUNDLER_VERSION} \
+  && gem install bundler \
   # Add non root user
   && useradd --uid $USER_ID --groups $GROUP -m app \
   && chown -R $USER_ID.$GROUP ${BASE_DIR} /home/app
