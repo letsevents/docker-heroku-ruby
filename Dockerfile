@@ -49,6 +49,7 @@ RUN set -ex \
 #
 
 ARG RUBY_VERSION=2.4.9
+ARG BUNDLER_VERSION=1.17.3
 ARG NODE_VERSION=0.12.7
 ARG RUBY_TGZ_SOURCE=https://heroku-buildpack-ruby.s3.amazonaws.com/cedar-14/ruby-${RUBY_VERSION}.tgz
 ARG NODE_TGZ_SOURCE=http://s3pository.heroku.com/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz
@@ -78,7 +79,7 @@ RUN set -ex \
   # Configure rubygems
   && echo "gem: --no-rdoc --no-ri" >> /etc/gemrc \
   # Install Bundler
-  && gem install bundler \
+  && gem install bundler -v ${BUNDLER_VERSION} \
   # Add non root user
   && useradd --uid $USER_ID --groups $GROUP -m app \
   && chown -R $USER_ID.$GROUP ${BASE_DIR} /home/app
