@@ -1,7 +1,7 @@
 FROM heroku/heroku:18
 MAINTAINER Samuel Brandão <samuel@lets.events>
 
-ARG USER_ID=1001
+ARG USER_ID=1000
 ARG GROUP=users
 ARG BASE_DIR=/app
 
