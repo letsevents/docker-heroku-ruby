@@ -28,6 +28,7 @@ RUN set -ex \
     libyaml-dev \
     python \
     zlib1g-dev \
+    libgmp-dev \
   # remove apt files
   && DEBIAN_FRONTEND=noninteractive apt-get -y clean \
   && rm -rf /var/lib/apt/lists/*
@@ -51,7 +52,7 @@ RUN set -ex \
 ARG RUBY_VERSION=2.4.9
 ARG BUNDLER_VERSION=1.17.3
 ARG NODE_VERSION=0.12.7
-ARG RUBY_TGZ_SOURCE=https://heroku-buildpack-ruby.s3.amazonaws.com/cedar-14/ruby-${RUBY_VERSION}.tgz
+ARG RUBY_TGZ_SOURCE=https://heroku-buildpack-ruby.s3.amazonaws.com/heroku-18/ruby-${RUBY_VERSION}.tgz
 ARG NODE_TGZ_SOURCE=http://s3pository.heroku.com/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz
 ARG RUBY_DIR=${BASE_DIR}/ruby/${RUBY_VERSION}
 ARG NODE_DIR=${BASE_DIR}/node/${NODE_VERSION}
