@@ -21,6 +21,8 @@ ARG SRC_DIR=${BASE_DIR}/src
 
 RUN set -ex \
   # Install ubuntu packages for development
+  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+  && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
   && DEBIAN_FRONTEND=noninteractive apt-get update -y \
   && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     apt-transport-https \
@@ -36,6 +38,7 @@ RUN set -ex \
     python \
     zlib1g-dev \
     libgmp-dev \
+    yarn \
   # remove apt files
   && DEBIAN_FRONTEND=noninteractive apt-get -y clean \
   && rm -rf /var/lib/apt/lists/*
